@@ -11,7 +11,7 @@ A task is solved by processing the various layers between the input and output l
 The greater the number of layers to be processed, the deeper the network, therefore the term, deep learning.
 
 <p align="center">  
-  <img width="470" height="300" src="/images/DNN.png">
+  <img width="470" height="300" src="images/DNN.png">
 </p>
 
 #### FaceDetectorDNN
@@ -21,7 +21,7 @@ The program uses the [caffe model](https://caffe.berkeleyvision.org/) as a neura
 * [res10_300x300_ssd_iter_140000_fp16.caffemodel](assets/res10_300x300_ssd_iter_140000_fp16.caffemodel) - is the binary data for the model weights
 
 <p align="center">  
-  <img width="470" height="300" src="/images/rickroll2.jpeg">
+  <img width="470" height="300" src="images/rickroll2.jpeg">
 </p>
 
 ### Haar Cascade
@@ -32,7 +32,7 @@ They are just like our convolutional kernel.
 Each feature is a single value obtained by subtracting sum of pixels under the white rectangle from sum of pixels under the black rectangle.
 
 <p align="center">  
-  <img width="470" height="300" src="/images/haar_features.jpeg">
+  <img width="470" height="300" src="images/haar_features.jpeg">
 </p>
 
 Now, all possible sizes and locations of each kernel are used to calculate lots of features.
@@ -47,7 +47,7 @@ The program uses pre-trained Haar cascade models to detect objects. The main fil
 * [haarcascade_frontalface_alt2.xml](assets/haarcascades/haarcascade_frontalface_alt2.xml)
 
 <p align="center">  
-  <img width="470" height="300" src="/images/rickroll.jpeg">
+  <img width="470" height="300" src="images/rickroll.jpeg">
 </p>
 
 ### Building
