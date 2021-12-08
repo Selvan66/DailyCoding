@@ -1,0 +1,3 @@
+[submodule "GameOfLife/SFML"]
+	path = GameOfLife/SFML
+	url = https://github.com/SFML/SFML.git
