@@ -1,4 +1,6 @@
-# SNAKE
+# Snake
+
+![Snake](img/snake.gif)
 
 ## Setup
 
