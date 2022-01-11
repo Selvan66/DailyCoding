@@ -9,21 +9,21 @@ def increase_energy():
             data[x][y] += 1
 
 def flash_neig(x, y):
-    if x + 1 < len(data) and data[x + 1][y] != 0:
+    if (x + 1 < len(data)) and (data[x + 1][y] != 0):
         data[x + 1][y] += 1
-        if y + 1 < len(data) and data[x + 1][y + 1] != 0:
-            data[x + 1][y + 1] += 1
-        if y - 1 >= 0 and data[x + 1][y - 1] != 0:
-            data[x + 1][y - 1] += 1
-    if x - 1 >= 0 and data[x - 1][y] != 0:
+    if (x + 1 < len(data)) and (y + 1 < len(data)) and (data[x + 1][y + 1] != 0):
+        data[x + 1][y + 1] += 1
+    if (x + 1 < len(data)) and (y - 1 >= 0) and (data[x + 1][y - 1] != 0):
+        data[x + 1][y - 1] += 1
+    if (x - 1 >= 0) and (data[x - 1][y] != 0):
         data[x - 1][y] += 1
-        if y + 1 < len(data) and data[x - 1][y + 1] != 0:
-            data[x - 1][y + 1] += 1
-        if y - 1 >= 0 and data[x - 1][y - 1] != 0:
-            data[x - 1][y - 1] += 1
-    if y + 1 < len(data) and data[x][y + 1] != 0:
+    if (x - 1 >= 0) and (y + 1 < len(data)) and (data[x - 1][y + 1] != 0):
+        data[x - 1][y + 1] += 1
+    if (x - 1 >= 0) and (y - 1 >= 0) and (data[x - 1][y - 1] != 0):
+        data[x - 1][y - 1] += 1
+    if (y + 1 < len(data)) and (data[x][y + 1] != 0):
         data[x][y + 1] += 1
-    if y - 1 >= 0 and data[x][y - 1] != 0:
+    if (y - 1 >= 0) and (data[x][y - 1] != 0):
         data[x][y - 1] += 1
         
 def flash():
@@ -50,10 +50,9 @@ def step():
 
 
 sum = 0
-for i in range(10):
-    value = step()    
-    sum += value
-    for x in data:
-        print(x)
-    print('============================  %d' % value)
-print(sum)
+i = 0
+while sum != 100:
+    sum = step()
+    i += 1
+print(data)
+print(i)
