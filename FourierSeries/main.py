@@ -58,11 +58,11 @@ time = 0
 
 path = []
 
-points = readPointsFromDrawing(screen)
+points = readPointsFromFile('img/points.txt')
 vec = (points[0])
-sygnal = [x - vec[0] for (x, y) in points]
+sygnal = [(points[i][0] - vec[0]) * 3 for i in range(0, len(points), 5)]
 fourierX = dft(sygnal)
-sygnal = [y - vec[1] for (x, y) in points]
+sygnal = [(points[i][1] - vec[1]) * 3 for i in range(0, len(points), 5)]
 fourierY = dft(sygnal)
 num = len(fourierX)
 
@@ -87,9 +87,6 @@ while True:
 	
 	pg.draw.line(screen, 'White', vx, v)
 	pg.draw.line(screen, 'White', vy, v)
- 
-	if len(path) > 300:
-		path.pop()
  
 	dt = 2 * math.pi / num
 	time += dt
