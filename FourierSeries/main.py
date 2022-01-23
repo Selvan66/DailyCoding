@@ -3,30 +3,35 @@ import math, sys
 from dft import dft
 
 def readPointsFromFile(file):
-    p = []
-    with open(file) as f:
-        for line in f.readlines():
-            p.append(eval(line))
-    return p
+	p = []
+	with open(file) as f:
+		for line in f.readlines():
+			p.append(eval(line))
+	return p
 
-############### SETUP #####################
-pg.init()
-screen = pg.display.set_mode((800, 800))
-pg.display.set_caption('Fourier Series')
-
-clock = pg.time.Clock()
-time = 0
-
-num = 200
-path = []
-
-sygnal = [100 * math.sin(2 * math.pi * i * 3 * 1/num) for i in range(num)]
-fourierX = dft(sygnal)
-sygnal = [50 * math.cos(2 * math.pi * i * 5 * 1/num) for i in range(num)]
-fourierY = dft(sygnal)
-
-
-############################################
+def readPointsFromDrawing(screen):
+	p = []
+	start = False
+	clock = pg.time.Clock()
+	while True:
+		for event in pg.event.get():
+			if event.type == pg.QUIT:
+				pg.quit()
+				sys.exit()
+			if event.type == pg.MOUSEBUTTONDOWN:
+				start = True
+			if event.type == pg.MOUSEBUTTONUP:
+				start = False
+		if p and not start:
+			return p
+		if start:
+			p.append(pg.mouse.get_pos())
+		screen.fill('Black')
+		if len(p) > 1:
+			pg.draw.aalines(screen, 'White', False, p)
+		pg.display.update()	
+		clock.tick(33)
+  
 
 def drawFourier(x, y, rotation, fourier):
 	num = len(fourier)
@@ -42,8 +47,27 @@ def drawFourier(x, y, rotation, fourier):
 		pg.draw.line(screen, 'White', prev, (x, y))
 		
 	return (x, y)
-	
-	
+
+############### SETUP #####################
+pg.init()
+screen = pg.display.set_mode((800, 800))
+pg.display.set_caption('Fourier Series')
+
+clock = pg.time.Clock()
+time = 0
+
+path = []
+
+points = readPointsFromDrawing(screen)
+vec = (points[0])
+sygnal = [x - vec[0] for (x, y) in points]
+fourierX = dft(sygnal)
+sygnal = [y - vec[1] for (x, y) in points]
+fourierY = dft(sygnal)
+num = len(fourierX)
+
+
+############################################
 	
 while True:
 	for event in pg.event.get():
