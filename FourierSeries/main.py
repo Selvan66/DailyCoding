@@ -43,7 +43,7 @@ def drawFourier(x, y, rotation, fourier):
 		x += radius * math.cos(freq * time + phase + rotation)
 		y += radius * math.sin(freq * time + phase + rotation)
 		
-		pg.draw.circle(screen, 'White', prev, radius, 2)
+		pg.draw.circle(screen, 'White', prev, radius, 5)
 		pg.draw.line(screen, 'White', prev, (x, y))
 		
 	return (x, y)
