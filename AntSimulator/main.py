@@ -1,12 +1,12 @@
 import pygame
 
-from nest import Nest
+from map import Map
 
 pygame.init()
 screen = pygame.display.set_mode((800, 800))
 clock = pygame.time.Clock()
 
-nest = Nest((400, 400), 3, screen)
+map = Map(screen, 100)
 
 is_running = True
 
@@ -16,8 +16,11 @@ while is_running:
             is_running = False
     screen.fill('White')
 
-    nest.draw()
-    nest.update()
-    pygame.draw.circle(screen, 'Red', (100, 100), 5)
+    map.update()
+    map.draw()
+    
+    map.update()
+    map.draw()
+    
     pygame.display.update()
     clock.tick(33)
