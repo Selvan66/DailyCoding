@@ -30,10 +30,9 @@ class Map:
         
         self.leaf = pygame.image.load('assets/leaf.png').convert_alpha()
         self.leaf = pygame.transform.rotozoom(self.leaf, 0, 0.5)
-        self.grid[(0, 0)] = Objects.LEAF
-        self.grid[(1, 1)] = Objects.LEAF
-        self.grid[(2, 2)] = Objects.LEAF
-        
+        for i in range(5):
+            for j in range(5):
+                self.grid[(i, j)] = Objects.LEAF
     def init_ants(self):
         pos = self.from_grid_to_pos(self.nest_pos)
         for _ in range(self.ants_amount):
@@ -43,24 +42,50 @@ class Map:
     def from_grid_to_pos(self, grid):
         return (grid[0] * self.side_size, grid[1] * self.side_size)
     
+    def from_pos_to_grid(self, pos):
+        vec = ((pos[0] // self.side_size) + 1, (pos[1] // self.side_size) + 1)
+        if vec[0] < 0:
+            vec = (0, vec[1])
+        if vec[1] < 0:
+            vec = (vec[0], 0)
+        if vec[0] >= self.side:
+            vec = (self.side - 1, vec[1])
+        if vec[1] >= self.side:
+            vec = (vec[0], self.side - 1)
+        return vec
+    
     def draw(self):
-        self.draw_grid()
+        #self.draw_grid()
         
         self.ants.draw(self.screen)
         
         for (pos, obj) in self.grid.items():
             if obj == Objects.NEST:
-                pygame.draw.circle(self.screen, 'Blue', self.from_grid_to_pos(pos), 20)
+                pygame.draw.circle(self.screen, 'Blue', self.from_grid_to_pos(pos), 40)
             elif obj == Objects.LEAF:
                 self.screen.blit(self.leaf, pygame.Rect(self.from_grid_to_pos(pos), (10, 10)))
-    
+            elif obj == Objects.PHEROMONE:
+                pygame.draw.circle(self.screen, 'Red', self.from_grid_to_pos(pos), 2)
+            
     def draw_grid(self):
         for i in range(self.side):
-            pygame.draw.line(self.screen, 'Red', (0, i * self.side_size), (self.screen.get_rect().width, i * self.side_size))
+            pygame.draw.line(self.screen, 'Black', (0, i * self.side_size), (self.screen.get_rect().width, i * self.side_size))
         for i in range(self.side):
-            pygame.draw.line(self.screen, 'Red', (i * self.side_size, 0), (i* self.side_size, self.screen.get_rect().height))
+            pygame.draw.line(self.screen, 'Black', (i * self.side_size, 0), (i* self.side_size, self.screen.get_rect().height))
+               
     def update(self):
         
         self.ants.update()
         for ant in self.ants:
             ant.collision(self.screen.get_rect())
+            
+            if ant.has_leaf == True:
+                if ant.goto == False:
+                    ant.put_leaf()
+                elif self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] == Objects.NONE:
+                    self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] = Objects.PHEROMONE
+            
+            if not ant.has_leaf and self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] == Objects.LEAF:
+                    ant.get_leaf()
+                    ant.go_to(self.from_grid_to_pos(self.nest_pos))
+                    self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] = Objects.NONE
