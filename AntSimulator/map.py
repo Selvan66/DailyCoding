@@ -84,8 +84,12 @@ class Map:
                     ant.put_leaf()
                 elif self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] == Objects.NONE:
                     self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] = Objects.PHEROMONE
-            
-            if not ant.has_leaf and self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] == Objects.LEAF:
+            else:
+                if self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] == Objects.LEAF:
                     ant.get_leaf()
                     ant.go_to(self.from_grid_to_pos(self.nest_pos))
                     self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] = Objects.NONE
+                elif self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] == Objects.PHEROMONE:
+                    ant.feel_pheromone()
+                elif ant.pheromone == True and self.grid[self.from_pos_to_grid((ant.rect.x, ant.rect.y))] == Objects.NONE:
+                    ant.turn_back()

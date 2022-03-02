@@ -16,6 +16,7 @@ class Ant(pygame.sprite.Sprite):
         self.goto_pos = (0, 0)
         self.goto_ang = 0
         self.has_leaf = False
+        self.pheromone = False
     
     def get_leaf(self):
         self.has_leaf = True
@@ -25,9 +26,15 @@ class Ant(pygame.sprite.Sprite):
         self.has_leaf = False
         self.img = self.img_ant
     
+    def feel_pheromone(self):
+        self.pheromone = True
+    
+    def turn_back(self):
+        self.ang += np.pi
+    
     def collision(self, rect):
         if not rect.colliderect(self.rect):
-            self.ang += np.pi
+            self.turn_back()
     
     def move(self):
         if self.goto:
