@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(Template CXX)
+project(Checkers CXX)
 
 # Cmake
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})

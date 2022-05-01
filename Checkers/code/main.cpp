@@ -1,11 +1,13 @@
 #include <SFML/Graphics.hpp>
 
+#include "Board.hpp"
+
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    sf::RenderWindow window(sf::VideoMode(840, 840), "Checkers");
+    window.setFramerateLimit(60);
 
+    Board board;
     while (window.isOpen())
     {
         sf::Event event;
@@ -16,7 +18,7 @@ int main()
         }
 
         window.clear();
-        window.draw(shape);
+        window.draw(board);
         window.display();
     }
 
