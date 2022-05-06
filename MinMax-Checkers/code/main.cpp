@@ -1,4 +1,4 @@
-#include "Checkers.hpp"
+#include "Checkers.h"
 
 int main()
 {

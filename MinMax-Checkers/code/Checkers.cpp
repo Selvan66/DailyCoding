@@ -1,37 +1,8 @@
-#pragma once
+#include <chrono>
+#include <limits>
 
-#include <iostream>
-#include <array>
-#include <vector>
-#include <string>
-
-class Checkers
-{
-    public:
-        struct Move
-        {
-            int oldI, oldJ, newI, newJ;
-            bool operator==(const Move& o) 
-            { return newI == o.newI && newJ == o.newJ && oldI == o.oldI && oldJ == o.oldJ;}
-        };
-    public:
-        Checkers();
-        void run();
-    private:
-        void printBoard() const;
-        bool checkMove(Move move, bool player) const;
-        bool checkJumps(Move move, int viaI, int viaJ, bool player) const;
-        std::vector<Move> findComputerMoves() const;
-        std::vector<Move> findPlayerMoves() const;
-        void makeMove(Move move, bool player);
-        void countPieces();
-    private:
-        static constexpr std::size_t mSize = 8;
-        std::array<std::array<std::string, mSize>, mSize> mBoard;
-        bool mPlayerTurn;
-        unsigned int mPlayerPieces;
-        unsigned int mComputerPieces;
-};
+#include "Checkers.h"
+#include "MinMax.hpp"
 
 Checkers::Checkers()
 : mBoard()
@@ -40,19 +11,19 @@ Checkers::Checkers()
 , mComputerPieces(12)
 {
     // Fill board
-    for (int i = 0; i < mSize; ++i)
-        for (int j = 0; j < mSize; ++j)
+    for (int i = 0; i < size; ++i)
+        for (int j = 0; j < size; ++j)
             mBoard[i][j] = "---";
 
     // Fill computer piecies
     for (int i = 0; i < 3; ++i)
-        for (int j = 0; j < mSize; ++j)
+        for (int j = 0; j < size; ++j)
             if ((i + j) % 2 == 1)
                 mBoard[i][j] = "c" + std::to_string(i) + std::to_string(j);
     
     // Fill player piecies
-    for (int i = 5; i < mSize; ++i)
-        for (int j = 0; j < mSize; ++j)
+    for (int i = 5; i < size; ++i)
+        for (int j = 0; j < size; ++j)
             if ((i + j) % 2 == 1)
                 mBoard[i][j] = "b" + std::to_string(i) + std::to_string(j);
 }
@@ -101,6 +72,42 @@ void Checkers::run()
         else
         {
             std::cout << "Computer move: " << std::endl;
+            std::cout << "Thinking..." << std::endl;
+
+            auto start = std::chrono::high_resolution_clock::now();
+
+            auto firstPCMove = makeNodes(*this, false);
+
+            if (firstPCMove.size() == 0)
+                if (mComputerPieces < mPlayerPieces)
+                    std::cout << "No move left, YOU WIN" << std::endl;
+                else
+                    std::cout << "No move left, Pass" << std::endl;
+
+            int best = -std::numeric_limits<int>::max();
+            Move bestMove;
+            for (auto& node : firstPCMove)
+            {
+                int val = minMax(node.checkers, 4, -std::numeric_limits<int>::max(), std::numeric_limits<int>::max(), true);
+                if (val > best)
+                {
+                    best = val;
+                    bestMove = node.move;
+                }
+            }
+
+            if (best == -std::numeric_limits<int>::max())
+            {
+                std::cout << "Computer cannot make move" << std::endl << "YOU WIN" << std::endl;
+                break;
+            }
+
+            makeMove(bestMove, false);
+            std::cout << "Computer has move from (" << bestMove.oldI << ", " << bestMove.oldJ << ") to (" 
+                    << bestMove.newI << ", " << bestMove.newJ << ")" << std::endl; 
+
+            auto end = std::chrono::high_resolution_clock::now();
+            std::cout << "It took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
         }
 
         if (mPlayerPieces == 0)
@@ -121,17 +128,17 @@ void Checkers::run()
 void Checkers::printBoard() const
 {
     std::cout << std::endl;
-    for (int i = 0; i < mSize; ++i)
+    for (int i = 0; i < size; ++i)
     {
         std::cout << i << " |";
-        for (int j = 0; j < mSize; ++j)
+        for (int j = 0; j < size; ++j)
         {
             std::cout << mBoard[i][j] << " ";
         }
         std::cout << std::endl;
     }
     std::cout << "  ________________________________" << std::endl;
-    for (int i = 0; i < mSize; ++i)
+    for (int i = 0; i < size; ++i)
     {
         if (i == 0)
             std::cout << "    ";
@@ -143,9 +150,9 @@ void Checkers::printBoard() const
 
 bool Checkers::checkMove(Checkers::Move move, bool player) const
 {
-    if (move.newI >= mSize || move.newI < 0)
+    if (move.newI >= size || move.newI < 0)
         return false;
-    if (move.newJ >= mSize || move.newJ < 0)
+    if (move.newJ >= size || move.newJ < 0)
         return false;
     if (mBoard[move.oldI][move.oldJ] == "---")
         return false;
@@ -176,8 +183,8 @@ std::vector<Checkers::Move> Checkers::findComputerMoves() const
     std::vector<Move> moves;
     std::vector<Move> jumps;
 
-    for (int i = 0; i < mSize; ++i)
-        for (int j = 0; j < mSize; ++j)
+    for (int i = 0; i < size; ++i)
+        for (int j = 0; j < size; ++j)
             if (mBoard[i][j][0] == 'c')
             {
                 if (checkMove({i, j, i + 1, j + 1}, false))
@@ -219,8 +226,8 @@ std::vector<Checkers::Move> Checkers::findPlayerMoves() const
     std::vector<Move> moves;
     std::vector<Move> jumps;
 
-    for (int i = 0; i < mSize; ++i)
-        for (int j = 0; j < mSize; ++j)
+    for (int i = 0; i < size; ++i)
+        for (int j = 0; j < size; ++j)
             if (mBoard[i][j][0] == 'b')
             {
                 if (checkMove({i, j, i - 1, j - 1}, true))
@@ -257,26 +264,27 @@ std::vector<Checkers::Move> Checkers::findPlayerMoves() const
     return jumps;
 }
 
+const Checkers::Board& Checkers::getBoard() const
+{
+    return mBoard;
+}
+
 void Checkers::makeMove(Move move, bool player)
 {
-    char letter;
+    char letter = mBoard[move.oldI][move.oldJ][0];
     if (player)
     {
         if (move.newI == 0)
             letter = 'B';
-        else
-            letter = 'b';
     }
     else
     {
-        if (move.newI == (mSize - 1))
+        if (move.newI == (size - 1))
             letter = 'C';
-        else
-            letter = 'c';
     }
     
     int i_diff = move.oldI - move.newI;
-    int j_diff = move.oldJ - move.oldJ;
+    int j_diff = move.oldJ - move.newJ;
 
     if (i_diff == -2 && j_diff == 2)
         mBoard[move.oldI + 1][move.oldJ - 1] = "---";
@@ -296,8 +304,8 @@ void Checkers::countPieces()
     mComputerPieces = 0;
     mPlayerPieces = 0;
 
-    for (int i = 0; i < mSize; ++i)
-        for (int j = 0; j < mSize; ++j)
+    for (int i = 0; i < size; ++i)
+        for (int j = 0; j < size; ++j)
             if (mBoard[i][j][0] == 'c' || mBoard[i][j][0] == 'C')
                 mComputerPieces++;
             else if (mBoard[i][j][0] == 'b' || mBoard[i][j][0] == 'B')
