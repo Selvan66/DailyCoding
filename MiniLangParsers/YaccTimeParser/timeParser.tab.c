@@ -70,7 +70,7 @@ void yyerror(char* s);
 #include <stdlib.h>
 int getNoonTime(int time, char noon);
 void isHourValid(int hour, int isNoon);
-void isMinutsValid(int minuts);
+void isMinuteValid(int minute);
 
 /* Line 371 of yacc.c  */
 #line 77 "timeParser.tab.c"
@@ -1341,13 +1341,13 @@ yyreduce:
         case 2:
 /* Line 1792 of yacc.c  */
 #line 18 "timeParser.y"
-    {isHourValid((yyvsp[(1) - (5)].num), 1); isMinutsValid((yyvsp[(3) - (5)].num)); printf("%d:%d\n", getNoonTime((yyvsp[(1) - (5)].num), (yyvsp[(4) - (5)].id)), (yyvsp[(3) - (5)].num));}
+    {isHourValid((yyvsp[(1) - (5)].num), 1); isMinuteValid((yyvsp[(3) - (5)].num)); printf("%d:%d\n", getNoonTime((yyvsp[(1) - (5)].num), (yyvsp[(4) - (5)].id)), (yyvsp[(3) - (5)].num));}
     break;
 
   case 3:
 /* Line 1792 of yacc.c  */
 #line 19 "timeParser.y"
-    {isHourValid((yyvsp[(1) - (4)].num), 0); isMinutsValid((yyvsp[(3) - (4)].num)); printf("%d:%d\n", (yyvsp[(1) - (4)].num), (yyvsp[(3) - (4)].num));}
+    {isHourValid((yyvsp[(1) - (4)].num), 0); isMinuteValid((yyvsp[(3) - (4)].num)); printf("%d:%d\n", (yyvsp[(1) - (4)].num), (yyvsp[(3) - (4)].num));}
     break;
 
   case 4:
@@ -1365,13 +1365,13 @@ yyreduce:
   case 6:
 /* Line 1792 of yacc.c  */
 #line 22 "timeParser.y"
-    {isHourValid((yyvsp[(2) - (6)].num), 1); isMinutsValid((yyvsp[(4) - (6)].num)); printf("%d:%d\n", getNoonTime((yyvsp[(2) - (6)].num), (yyvsp[(5) - (6)].id)), (yyvsp[(4) - (6)].num));}
+    {isHourValid((yyvsp[(2) - (6)].num), 1); isMinuteValid((yyvsp[(4) - (6)].num)); printf("%d:%d\n", getNoonTime((yyvsp[(2) - (6)].num), (yyvsp[(5) - (6)].id)), (yyvsp[(4) - (6)].num));}
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
 #line 23 "timeParser.y"
-    {isHourValid((yyvsp[(2) - (5)].num), 0); isMinutsValid((yyvsp[(4) - (5)].num)); printf("%d:%d\n", (yyvsp[(2) - (5)].num), (yyvsp[(4) - (5)].num));}
+    {isHourValid((yyvsp[(2) - (5)].num), 0); isMinuteValid((yyvsp[(4) - (5)].num)); printf("%d:%d\n", (yyvsp[(2) - (5)].num), (yyvsp[(4) - (5)].num));}
     break;
 
   case 8:
@@ -1645,9 +1645,9 @@ void isHourValid(int hour, int isNoon)
     }
 }
 
-void isMinutsValid(int minuts)
+void isMinuteValid(int minute)
 {
-    if (!(minuts <= 59 && minuts >= 0))
+    if (!(minute <= 59 && minute >= 0))
     {
         printf("Error: Minuts = [0-59]");
         exit(0);

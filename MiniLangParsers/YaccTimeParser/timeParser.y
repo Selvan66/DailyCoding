@@ -4,7 +4,7 @@ void yyerror(char* s);
 #include <stdlib.h>
 int getNoonTime(int time, char noon);
 void isHourValid(int hour, int isNoon);
-void isMinutsValid(int minuts);
+void isMinuteValid(int minute);
 %}
 
 %union {int num; char id;}
@@ -15,12 +15,12 @@ void isMinutsValid(int minuts);
 
 %%
 
-time : number ':' number noon '\n'      {isHourValid($1, 1); isMinutsValid($3); printf("%d:%d\n", getNoonTime($1, $4), $3);}
-     | number ':' number '\n'           {isHourValid($1, 0); isMinutsValid($3); printf("%d:%d\n", $1, $3);}
+time : number ':' number noon '\n'      {isHourValid($1, 1); isMinuteValid($3); printf("%d:%d\n", getNoonTime($1, $4), $3);}
+     | number ':' number '\n'           {isHourValid($1, 0); isMinuteValid($3); printf("%d:%d\n", $1, $3);}
      | number noon '\n'                 {isHourValid($1, 1); printf("%d:%d\n", getNoonTime($1, $2));}
      | number '\n'                      {isHourValid($1, 0); printf("%d:%d\n", $1);}
-     | time number ':' number noon '\n'      {isHourValid($2, 1); isMinutsValid($4); printf("%d:%d\n", getNoonTime($2, $5), $4);}
-     | time number ':' number '\n'           {isHourValid($2, 0); isMinutsValid($4); printf("%d:%d\n", $2, $4);}
+     | time number ':' number noon '\n'      {isHourValid($2, 1); isMinuteValid($4); printf("%d:%d\n", getNoonTime($2, $5), $4);}
+     | time number ':' number '\n'           {isHourValid($2, 0); isMinuteValid($4); printf("%d:%d\n", $2, $4);}
      | time number noon '\n'                 {isHourValid($2, 1); printf("%d:%d\n", getNoonTime($2, $3));}
      | time number '\n'                      {isHourValid($2, 0); printf("%d:%d\n", $2);}
      ;
@@ -50,9 +50,9 @@ void isHourValid(int hour, int isNoon)
     }
 }
 
-void isMinutsValid(int minuts)
+void isMinuteValid(int minute)
 {
-    if (!(minuts <= 59 && minuts >= 0))
+    if (!(minute <= 59 && minute >= 0))
     {
         printf("Error: Minuts = [0-59]");
         exit(0);
