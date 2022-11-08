@@ -1,6 +1,6 @@
 # DailyCoding
 
-A collection of codes presenting simple programming and mechanics issues written in C++ or python
+A collection of codes presenting simple programming and mechanics issues written in C++/Python/Rust
 
 ---
 
