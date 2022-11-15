@@ -1,0 +1,5 @@
+[
+    {"DateObserved":"2022-11-15 ","HourObserved":0,"LocalTimeZone":"PST","ReportingArea":"Las Vegas","StateCode":"NV","Latitude":36.206,"Longitude":-115.223,"ParameterName":"O3","AQI":27,"Category":{"Number":1,"Name":"Good"}},
+    {"DateObserved":"2022-11-15 ","HourObserved":0,"LocalTimeZone":"PST","ReportingArea":"Las Vegas","StateCode":"NV","Latitude":36.206,"Longitude":-115.223,"ParameterName":"PM2.5","AQI":47,"Category":{"Number":1,"Name":"Good"}},
+    {"DateObserved":"2022-11-15 ","HourObserved":0,"LocalTimeZone":"PST","ReportingArea":"Las Vegas","StateCode":"NV","Latitude":36.206,"Longitude":-115.223,"ParameterName":"PM10","AQI":27,"Category":{"Number":1,"Name":"Good"}}
+]
