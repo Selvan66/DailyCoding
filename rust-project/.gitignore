@@ -1,3 +1,5 @@
 .vscode/
 target/
+wix/
+.env
 Cargo.lock
