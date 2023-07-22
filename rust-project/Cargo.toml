@@ -10,6 +10,7 @@ authors = ["Selvan"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-newsapi = { path = "./newsapi" }
+newsapi = { path = "./newsapi", features = ["async"] }
 dotenv = "0.15.0"
 termimad = "0.23.1"
+tokio = { version = "1.29.1", features = ["full"] }

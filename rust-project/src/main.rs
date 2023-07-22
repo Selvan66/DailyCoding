@@ -3,30 +3,32 @@ mod theme;
 use dotenv::dotenv;
 use std::error::Error;
 
-use newsapi::{get_articles, Articles};
+use newsapi::{Article, Country, Endpoint, NewsApi};
 
-fn render_articles(articles: &Articles) {
+fn render_articles(articles: &Vec<Article>) {
     let theme = theme::default();
     theme.print_text("# Top headlines\n\n");
 
-    for i in &articles.articles {
-        theme.print_text(&format!("`{}`", i.title));
-        theme.print_text(&format!("> *{}*", i.url));
+    for i in articles {
+        theme.print_text(&format!("`{}`", i.title()));
+        theme.print_text(&format!("> *{}*", i.url()));
         theme.print_text("---");
     }
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
     dotenv();
 
     let api_key = std::env::var("API_KEY")?;
 
-    let url = "https://newsapi.org/v2/top-headlines?country=pl&apiKey=";
-    let url = format!("{}{}", url, api_key);
+    let response = NewsApi::new(&api_key)
+        .endpoint(Endpoint::TopHeadlines)
+        .country(Country::Us)
+        .fetch_async()
+        .await?;
 
-    let articles = get_articles(&url)?;
-
-    render_articles(&articles);
+    render_articles(&response.articles());
 
     Ok(())
 }
