@@ -24,7 +24,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let response = NewsApi::new(&api_key)
         .endpoint(Endpoint::TopHeadlines)
-        .country(Country::Us)
+        .country(Country::Pl)
         .fetch_async()
         .await?;
 
