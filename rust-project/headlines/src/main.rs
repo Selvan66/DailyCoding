@@ -10,18 +10,33 @@ impl App for Headlines {
         _frame: &mut eframe::epi::Frame<'_>,
         _storage: Option<&dyn eframe::epi::Storage>,
     ) {
+        self.load_news();
         self.configure_fonts(ctx);
     }
 
-    fn update(&mut self, ctx: &eframe::egui::CtxRef, _frame: &mut eframe::epi::Frame<'_>) {
-        self.render_top_panel(ctx);
-        CentralPanel::default().show(ctx, |ui| {
-            render_header(ui);
-            ScrollArea::auto_sized().show(ui, |ui| {
-                self.render_news_cards(ui);
+    fn update(&mut self, ctx: &eframe::egui::CtxRef, frame: &mut eframe::epi::Frame<'_>) {
+        ctx.request_repaint();
+
+        if self.config.dark_mode {
+            ctx.set_visuals(Visuals::dark());
+        } else {
+            ctx.set_visuals(Visuals::light());
+        }
+
+        if !self.api_key_initialized {
+            self.render_config(ctx);
+        } else {
+            self.preload_articles();
+
+            self.render_top_panel(ctx, frame);
+            CentralPanel::default().show(ctx, |ui| {
+                render_header(ui);
+                ScrollArea::auto_sized().show(ui, |ui| {
+                    self.render_news_cards(ui);
+                });
+                render_footer(ctx);
             });
-            render_footer(ctx);
-        });
+        }
     }
 
     fn name(&self) -> &str {
@@ -54,6 +69,7 @@ fn render_header(ui: &mut Ui) {
 }
 
 fn main() {
+    tracing_subscriber::fmt::init();
     let app = Headlines::new();
     let mut win_option = NativeOptions::default();
     win_option.initial_window_size = Some(Vec2::new(540., 860.));
